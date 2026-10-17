@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MazeWay · Oda daveti</title>
+<meta name="robots" content="noindex">
+<style>
+  /* The store page's header picture behind the whole page, the builder and the mole at their
+     wall (the owner, 17 October), and the game's own title lettering (Fredoka, SIL OFL:
+     mazeway-display-OFL.txt). The words sit on cream plates so they read over the picture. */
+  @font-face { font-family: "MazeWay Display"; src: url("mazeway-display.ttf") format("truetype"); font-display: swap; }
+  :root { --ink: #422344; --muted: #6e4f68; --card: rgba(255, 248, 232, .92); --gold: #ffd43b; --gold-lip: #f0a020; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 0;
+         background: #bfe6fb url("oda-baslik.jpg") 38% 50% / cover no-repeat fixed; overflow-x: hidden;
+         color: var(--ink); font: 17px/1.45 -apple-system, "Segoe UI", Roboto, sans-serif; }
+  @media (min-aspect-ratio: 4/3) { body { background-image: url("oda-baslik-genis.jpg"); background-position: 50% 40%; } }
+  /* On an upright phone the whole picture across the top, both of them in it, and the plates
+     under it on the picture's own sky and paving colours. */
+  @media (max-aspect-ratio: 1/1) {
+    body { justify-content: flex-start; padding-top: calc(66.6vw - 34px);
+           background: url("oda-baslik.jpg") top center / 100% auto no-repeat, linear-gradient(#f6c9a0 0, #f3dcc0 66vw, #fbe9d2); }
+  }
+  .head { font-family: "MazeWay Display", -apple-system, sans-serif; text-align: center; margin: 0 16px 14px; padding: 14px 22px 16px;
+          background: rgba(255, 248, 232, .88); border: 3px solid #fff; border-radius: 28px; box-shadow: 0 8px 20px rgba(40, 22, 48, .2); }
+  .head h1 { margin: 0; font-size: clamp(32px, 9vw, 50px); line-height: 1.05; }
+  .head p { margin: 8px 0 0; font-size: clamp(17px, 4.6vw, 22px); color: var(--ink); }
+  main { width: calc(100% - 32px); max-width: 420px; background: var(--card); border: 3px solid #fff; border-radius: 30px; padding: 24px 22px;
+         text-align: center; box-shadow: 0 10px 24px rgba(40, 22, 48, .22); }
+  p { margin: 8px 0; color: var(--muted); }
+  .code { margin: 6px 0 16px; font: 700 40px/1 ui-monospace, Menlo, Consolas, monospace; letter-spacing: 6px; color: var(--ink); }
+  .btn { display: block; margin: 12px 0 0; padding: 16px; border-radius: 20px; text-decoration: none; font: 22px/1.2 "MazeWay Display", sans-serif;
+         color: var(--ink); background: var(--gold); box-shadow: 0 5px 0 var(--gold-lip); }
+  .btn.plain { background: #fff; box-shadow: 0 5px 0 #e2cfb6; font-size: 19px; }
+  .en { margin-top: 18px; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="head">
+  <h1>Arkadaşın seni<br>bekliyor!</h1>
+  <p>MazeWay'de senin için bir oda açtı</p>
+</div>
+<main>
+  <p>Oyun telefonunda varsa aşağıdaki düğmeyle doğrudan odaya girersin. Oda kodu:</p>
+  <div class="code" id="code">······</div>
+  <a class="btn" id="open" href="mazeway://oda/">Oyunu aç ve katıl</a>
+  <a class="btn plain" href="https://apps.apple.com/app/id6816394163">App Store'da MazeWay</a>
+  <p>Oyun açılmazsa: Çevrimiçi oyna → Kodla katıl, kodu yaz.</p>
+  <p class="en">Your friend is waiting in a MazeWay room. Open the game to join, or enter the code under Play online → Join with code.</p>
+</main>
+<script>
+  // The room code from the link (#ABCDEF or ?k=ABCDEF), the game's own alphabet only.
+  var raw = (location.hash.slice(1) || new URLSearchParams(location.search).get("k") || "").toUpperCase();
+  var code = raw.replace(/[^A-HJ-KM-NP-Z2-9]/g, "").slice(0, 6);
+  if (code.length === 6) {
+    document.getElementById("code").textContent = code;
+    var link = "mazeway://oda/" + code;
+    document.getElementById("open").href = link;
+    // Tries the game once; a phone without it stays on this page.
+    setTimeout(function () { location.href = link; }, 300);
+  }
+</script>
+</body>
+</html>
